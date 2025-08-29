@@ -203,7 +203,7 @@ const BusinessPlan = () => {
                     </AccordionTrigger>
                     <AccordionContent>
                       <ul className="space-y-2">
-                        {businessPlanData.operations.atabridgeOps.map((op, index) => (
+                        {(businessPlanData.operations?.atabridge_ops || businessPlanData.operations?.atabridgeOps || []).map((op, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <div className="h-2 w-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-700">{op}</span>
@@ -219,7 +219,7 @@ const BusinessPlan = () => {
                     </AccordionTrigger>
                     <AccordionContent>
                       <ul className="space-y-2">
-                        {businessPlanData.operations.ertugOps.map((op, index) => (
+                        {(businessPlanData.operations?.ertug_ops || businessPlanData.operations?.ertugOps || []).map((op, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <div className="h-2 w-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-700">{op}</span>
@@ -235,7 +235,7 @@ const BusinessPlan = () => {
                     </AccordionTrigger>
                     <AccordionContent>
                       <ul className="space-y-2">
-                        {businessPlanData.operations.fiyuuOps.map((op, index) => (
+                        {(businessPlanData.operations?.fiyuu_ops || businessPlanData.operations?.fiyuuOps || []).map((op, index) => (
                           <li key={index} className="flex items-start space-x-2">
                             <div className="h-2 w-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
                             <span className="text-gray-700">{op}</span>
