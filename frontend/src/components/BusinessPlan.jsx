@@ -269,14 +269,14 @@ const BusinessPlan = () => {
                     Üretim Ekipmanları
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
-                    {businessPlanData.products.equipment.map((equipment, index) => (
+                    {(businessPlanData.products?.equipment || []).map((equipment, index) => (
                       <Card key={index} className="border border-purple-100">
                         <CardContent className="p-4 space-y-4">
                           <ImageUploader 
                             type="equipment" 
                             id={equipment.name}
                             label={equipment.name}
-                            existingImageId={equipment.imageId}
+                            existingImageId={equipment.image_id || equipment.imageId}
                           />
                           <div>
                             <h4 className="font-semibold text-gray-800">{equipment.name}</h4>
@@ -294,7 +294,7 @@ const BusinessPlan = () => {
                 <div>
                   <h3 className="text-xl font-semibold text-purple-600 mb-4 flex items-center">
                     <Zap className="h-5 w-5 mr-2" />
-                    E-Moped Model "{businessPlanData.products.emoped.model}"
+                    E-Moped Model "{businessPlanData.products?.emoped?.model || 'BODYGUARD'}"
                   </h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     <Card className="border border-purple-100">
@@ -303,7 +303,7 @@ const BusinessPlan = () => {
                           type="emoped" 
                           id="bodyguard"
                           label="E-Moped BODYGUARD"
-                          existingImageId={businessPlanData.products.emoped.imageId}
+                          existingImageId={businessPlanData.products?.emoped?.image_id || businessPlanData.products?.emoped?.imageId}
                         />
                       </CardContent>
                     </Card>
@@ -311,7 +311,7 @@ const BusinessPlan = () => {
                       <CardContent className="p-4">
                         <h4 className="font-semibold text-gray-800 mb-4">Teknik Özellikler</h4>
                         <div className="space-y-3">
-                          {businessPlanData.products.emoped.specs.map((spec, index) => (
+                          {(businessPlanData.products?.emoped?.specs || []).map((spec, index) => (
                             <div key={index} className="flex justify-between">
                               <span className="text-gray-600">{spec.label}:</span>
                               <span className="font-medium text-gray-800">{spec.value}</span>
@@ -338,7 +338,7 @@ const BusinessPlan = () => {
                           type="battery" 
                           id="swap-cabinet"
                           label="Battery & Swap Cabinet"
-                          existingImageId={businessPlanData.products.battery.imageId}
+                          existingImageId={businessPlanData.products?.battery?.image_id || businessPlanData.products?.battery?.imageId}
                         />
                       </CardContent>
                     </Card>
@@ -346,7 +346,7 @@ const BusinessPlan = () => {
                       <CardContent className="p-4">
                         <h4 className="font-semibold text-gray-800 mb-4">Özellikler</h4>
                         <ul className="space-y-2">
-                          {businessPlanData.products.battery.features.map((feature, index) => (
+                          {(businessPlanData.products?.battery?.features || []).map((feature, index) => (
                             <li key={index} className="flex items-start space-x-2">
                               <div className="h-2 w-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
                               <span className="text-gray-700">{feature}</span>
