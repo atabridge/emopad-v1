@@ -1,59 +1,88 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent } from './ui/card';
 import { Button } from './ui/button';
-import { Upload, Image, X } from 'lucide-react';
-import { mockImages } from '../mock';
+import { Upload, Image, X, Loader2 } from 'lucide-react';
+import { imagesAPI, handleAPIError } from '../services/api';
+import { toast } from 'sonner';
 
-const ImageUploader = ({ type, id, label }) => {
+const ImageUploader = ({ type, id, label, existingImageId }) => {
   const [uploadedImage, setUploadedImage] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [imageId, setImageId] = useState(existingImageId);
 
-  const handleImageUpload = (event) => {
+  useEffect(() => {
+    if (existingImageId) {
+      setImageId(existingImageId);
+      setUploadedImage(imagesAPI.getImageUrl(existingImageId));
+    }
+  }, [existingImageId]);
+
+  const handleImageUpload = async (event) => {
     const file = event.target.files[0];
-    if (file) {
-      setIsUploading(true);
+    if (!file) return;
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Lütfen geçerli bir resim dosyası seçin');
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Dosya boyutu 5MB\'dan küçük olmalıdır');
+      return;
+    }
+
+    setIsUploading(true);
+    
+    try {
+      const itemId = type === 'equipment' ? id : null;
+      const response = await imagesAPI.uploadImage(file, type, itemId);
       
-      // Simulate upload delay
-      setTimeout(() => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setUploadedImage(e.target.result);
-          
-          // Store in mock data
-          if (type === 'equipment') {
-            mockImages.equipment[id] = e.target.result;
-          } else {
-            mockImages[type] = e.target.result;
-          }
-          
-          setIsUploading(false);
-        };
-        reader.readAsDataURL(file);
-      }, 1000);
+      if (response.success) {
+        setImageId(response.imageId);
+        setUploadedImage(response.imageUrl);
+        toast.success('Görsel başarıyla yüklendi');
+      }
+    } catch (error) {
+      const errorInfo = handleAPIError(error);
+      toast.error(`Yükleme hatası: ${errorInfo.message}`);
+      console.error('Upload error:', error);
+    } finally {
+      setIsUploading(false);
     }
   };
 
-  const removeImage = () => {
-    setUploadedImage(null);
-    if (type === 'equipment') {
-      delete mockImages.equipment[id];
-    } else {
-      mockImages[type] = null;
+  const removeImage = async () => {
+    if (!imageId) return;
+
+    try {
+      await imagesAPI.deleteImage(imageId);
+      setUploadedImage(null);
+      setImageId(null);
+      toast.success('Görsel başarıyla silindi');
+    } catch (error) {
+      const errorInfo = handleAPIError(error);
+      toast.error(`Silme hatası: ${errorInfo.message}`);
+      console.error('Delete error:', error);
     }
   };
 
-  const currentImage = uploadedImage || 
-    (type === 'equipment' ? mockImages.equipment[id] : mockImages[type]);
+  const currentImageUrl = uploadedImage || (imageId ? imagesAPI.getImageUrl(imageId) : null);
 
   return (
     <Card className="w-full h-48 relative overflow-hidden border-2 border-dashed border-gray-300 hover:border-orange-400 transition-colors">
       <CardContent className="p-0 h-full">
-        {currentImage ? (
+        {currentImageUrl ? (
           <div className="relative h-full">
             <img 
-              src={currentImage} 
+              src={currentImageUrl} 
               alt={label}
               className="w-full h-full object-cover"
+              onError={() => {
+                setUploadedImage(null);
+                setImageId(null);
+              }}
             />
             <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-30 transition-all duration-300 flex items-center justify-center">
               <Button
@@ -61,6 +90,7 @@ const ImageUploader = ({ type, id, label }) => {
                 size="sm"
                 onClick={removeImage}
                 className="opacity-0 hover:opacity-100 transition-opacity"
+                disabled={isUploading}
               >
                 <X className="h-4 w-4 mr-1" />
                 Kaldır
@@ -71,7 +101,7 @@ const ImageUploader = ({ type, id, label }) => {
           <div className="h-full flex flex-col items-center justify-center space-y-3 p-4">
             {isUploading ? (
               <div className="text-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto mb-2"></div>
+                <Loader2 className="animate-spin h-8 w-8 text-orange-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600">Yükleniyor...</p>
               </div>
             ) : (

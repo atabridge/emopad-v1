@@ -21,18 +21,20 @@ import {
   Factory,
   Building2,
   ShoppingCart,
-  PieChart
+  PieChart,
+  Loader2
 } from 'lucide-react';
-import { businessPlanData, mockImages } from '../mock';
 import Navigation from './Navigation';
 import SystemFlowDiagram from './SystemFlowDiagram';
 import FinancialCharts from './FinancialCharts';
 import AnimatedCounter from './AnimatedCounter';
 import ImageUploader from './ImageUploader';
+import { useBusinessPlan } from '../hooks/useBusinessPlan';
 
 const BusinessPlan = () => {
   const [activeSection, setActiveSection] = useState('executive');
   const [isMobile, setIsMobile] = useState(false);
+  const { data: businessPlanData, loading, error, refetch } = useBusinessPlan();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -51,6 +53,35 @@ const BusinessPlan = () => {
       setActiveSection(sectionId);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 animate-spin text-orange-500 mx-auto mb-4" />
+          <p className="text-lg text-gray-600">İş planı yükleniyor...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50 flex items-center justify-center">
+        <div className="text-center">
+          <AlertTriangle className="h-12 w-12 text-red-500 mx-auto mb-4" />
+          <p className="text-lg text-red-600 mb-4">{error}</p>
+          <Button onClick={refetch} variant="outline">
+            Tekrar Dene
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!businessPlanData) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-amber-50">
@@ -245,6 +276,7 @@ const BusinessPlan = () => {
                             type="equipment" 
                             id={equipment.name}
                             label={equipment.name}
+                            existingImageId={equipment.imageId}
                           />
                           <div>
                             <h4 className="font-semibold text-gray-800">{equipment.name}</h4>
@@ -271,6 +303,7 @@ const BusinessPlan = () => {
                           type="emoped" 
                           id="bodyguard"
                           label="E-Moped BODYGUARD"
+                          existingImageId={businessPlanData.products.emoped.imageId}
                         />
                       </CardContent>
                     </Card>
@@ -305,6 +338,7 @@ const BusinessPlan = () => {
                           type="battery" 
                           id="swap-cabinet"
                           label="Battery & Swap Cabinet"
+                          existingImageId={businessPlanData.products.battery.imageId}
                         />
                       </CardContent>
                     </Card>
