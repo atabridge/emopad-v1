@@ -170,7 +170,7 @@ const BusinessPlan = () => {
                 <div className="mt-8">
                   <h3 className="text-lg font-semibold text-blue-600 mb-4">Tedarikçiler</h3>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {businessPlanData.businessModel.suppliers.map((supplier, index) => (
+                    {(businessPlanData.business_model?.suppliers || businessPlanData.businessModel?.suppliers || []).map((supplier, index) => (
                       <Card key={index} className="border border-blue-100 hover:shadow-md transition-shadow">
                         <CardContent className="p-4">
                           <h4 className="font-semibold text-gray-800">{supplier.name}</h4>
