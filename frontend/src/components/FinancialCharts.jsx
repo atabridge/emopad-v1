@@ -182,7 +182,7 @@ const FinancialCharts = ({ data }) => {
           </Card>
 
           {/* Investment Summary for Selected Company */}
-          {selectedCompany === 'ertug' && (
+          {selectedCompany === 'ertug' && data?.ertug?.investments && (
             <Card className="p-6 border-green-200">
               <CardHeader>
                 <CardTitle className="text-green-700">Ertuğ Yatırım Detayları</CardTitle>
