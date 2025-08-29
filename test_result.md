@@ -278,12 +278,7 @@ metadata:
   run_ui: false
 
 test_plan:
-  current_focus:
-    - "Business Plan Data API"
-    - "Image Upload API"
-    - "Business Plan Main Component"
-    - "Image Upload Component"
-    - "Financial Charts Component"
+  current_focus: []
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
