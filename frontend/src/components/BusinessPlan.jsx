@@ -373,7 +373,7 @@ const BusinessPlan = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <FinancialCharts data={businessPlanData.financialData} />
+                <FinancialCharts data={businessPlanData.financial_data || businessPlanData.financialData} />
               </CardContent>
             </Card>
           </section>
