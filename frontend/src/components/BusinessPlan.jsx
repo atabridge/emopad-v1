@@ -432,7 +432,7 @@ const BusinessPlan = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {businessPlanData.investmentSummary.map((item, index) => (
+                      {(businessPlanData.investment_summary || businessPlanData.investmentSummary || []).map((item, index) => (
                         <tr key={index} className="border-b border-gray-100 hover:bg-indigo-25">
                           <td className="p-4">
                             <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200">
