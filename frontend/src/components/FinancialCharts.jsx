@@ -8,7 +8,25 @@ import AnimatedCounter from './AnimatedCounter';
 const FinancialCharts = ({ data }) => {
   const [selectedCompany, setSelectedCompany] = useState('ertug');
 
+  const formatCurrency = (amount) => {
+    if (amount >= 1000000000) {
+      return `${(amount / 1000000000).toFixed(1)}B TL`;
+    } else if (amount >= 1000000) {
+      return `${(amount / 1000000).toFixed(0)}M TL`;
+    } else if (amount >= 1000) {
+      return `${(amount / 1000).toFixed(0)}K TL`;
+    }
+    return `${amount} TL`;
+  };
+
+  const getGrowthIcon = (current, previous) => {
+    if (current > previous) return <TrendingUp className="h-4 w-4 text-green-600" />;
+    return <TrendingDown className="h-4 w-4 text-red-600" />;
+  };
+
   // Handle both snake_case and camelCase data formats
+  if (!data) return <div>No financial data available</div>;
+
   const companies = [
     { 
       id: 'ertug', 
