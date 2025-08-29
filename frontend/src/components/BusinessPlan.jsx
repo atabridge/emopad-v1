@@ -391,7 +391,7 @@ const BusinessPlan = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-4">
-                  {businessPlanData.risks.map((risk, index) => (
+                  {(businessPlanData.risks || []).map((risk, index) => (
                     <Card key={index} className="border border-red-100">
                       <CardContent className="p-4">
                         <div className="flex items-start space-x-3">
