@@ -8,26 +8,26 @@ import AnimatedCounter from './AnimatedCounter';
 const FinancialCharts = ({ data }) => {
   const [selectedCompany, setSelectedCompany] = useState('ertug');
 
-  const formatCurrency = (amount) => {
-    if (amount >= 1000000000) {
-      return `${(amount / 1000000000).toFixed(1)}B TL`;
-    } else if (amount >= 1000000) {
-      return `${(amount / 1000000).toFixed(0)}M TL`;
-    } else if (amount >= 1000) {
-      return `${(amount / 1000).toFixed(0)}K TL`;
-    }
-    return `${amount} TL`;
-  };
-
-  const getGrowthIcon = (current, previous) => {
-    if (current > previous) return <TrendingUp className="h-4 w-4 text-green-600" />;
-    return <TrendingDown className="h-4 w-4 text-red-600" />;
-  };
-
+  // Handle both snake_case and camelCase data formats
   const companies = [
-    { id: 'ertug', name: 'Ertuğ', data: data.ertug.financials, color: 'green' },
-    { id: 'fiyuuSales', name: 'Fiyuu - Sales', data: data.fiyuuSales.financials, color: 'orange' },
-    { id: 'fiyuuSwap', name: 'Fiyuu - Battery Rental', data: data.fiyuuSwap.financials, color: 'purple' }
+    { 
+      id: 'ertug', 
+      name: 'Ertuğ', 
+      data: data?.ertug?.financials || [], 
+      color: 'green' 
+    },
+    { 
+      id: 'fiyuuSales', 
+      name: 'Fiyuu - Sales', 
+      data: data?.fiyuu_sales?.financials || data?.fiyuuSales?.financials || [], 
+      color: 'orange' 
+    },
+    { 
+      id: 'fiyuuSwap', 
+      name: 'Fiyuu - Battery Rental', 
+      data: data?.fiyuu_swap?.financials || data?.fiyuuSwap?.financials || [], 
+      color: 'purple' 
+    }
   ];
 
   const selectedData = companies.find(c => c.id === selectedCompany);
