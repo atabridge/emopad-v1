@@ -118,13 +118,13 @@ const BusinessPlan = () => {
               <CardContent className="space-y-6">
                 <div>
                   <h3 className="text-lg font-semibold text-orange-600 mb-2">Proje Adı</h3>
-                  <p className="text-gray-700">{businessPlanData.executiveSummary.projectName}</p>
+                  <p className="text-gray-700">{businessPlanData.executive_summary?.project_name || businessPlanData.executiveSummary?.projectName}</p>
                 </div>
                 
                 <div>
                   <h3 className="text-lg font-semibold text-orange-600 mb-3">Aktörler</h3>
                   <div className="grid md:grid-cols-3 gap-4">
-                    {businessPlanData.executiveSummary.actors.map((actor, index) => (
+                    {(businessPlanData.executive_summary?.actors || businessPlanData.executiveSummary?.actors || []).map((actor, index) => (
                       <div key={index} className="p-4 bg-white rounded-lg shadow-sm border border-orange-100">
                         <h4 className="font-semibold text-gray-800">{actor.name}</h4>
                         <p className="text-sm text-gray-600">{actor.role}</p>
@@ -135,13 +135,13 @@ const BusinessPlan = () => {
 
                 <div>
                   <h3 className="text-lg font-semibold text-orange-600 mb-2">Amaç</h3>
-                  <p className="text-gray-700 leading-relaxed">{businessPlanData.executiveSummary.objective}</p>
+                  <p className="text-gray-700 leading-relaxed">{businessPlanData.executive_summary?.objective || businessPlanData.executiveSummary?.objective}</p>
                 </div>
 
                 <div>
                   <h3 className="text-lg font-semibold text-orange-600 mb-3">Gelir Modeli</h3>
                   <div className="space-y-2">
-                    {businessPlanData.executiveSummary.revenueModel.map((model, index) => (
+                    {(businessPlanData.executive_summary?.revenue_model || businessPlanData.executiveSummary?.revenueModel || []).map((model, index) => (
                       <div key={index} className="flex items-center space-x-2">
                         <ArrowRight className="h-4 w-4 text-orange-500" />
                         <span className="text-gray-700">{model}</span>
