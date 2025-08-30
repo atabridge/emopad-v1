@@ -177,80 +177,199 @@ const DashboardTab = () => {
 
       {/* Ürün Portföyü Özeti */}
       <section>
-        <div className="mb-4">
+        <div className="mb-6">
           <h3 className="text-xl font-bold text-gray-900 mb-2">Ürün Portföyü</h3>
+          <p className="text-gray-600">Proje kapsamındaki tüm ürün kategorileri ve detayları</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Üretim Ekipmanları */}
-          <Card className="border-orange-200">
+          <Card className="border-orange-200 hover:shadow-lg transition-all duration-300">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium flex items-center">
-                <Factory className="h-4 w-4 mr-2 text-orange-600" />
-                Üretim Ekipmanları
+                <Factory className="h-5 w-5 mr-2 text-orange-600" />
+                <span>Kategori A: Üretim Ekipmanları</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
-              {state.products.equipments.map((equipment, index) => (
-                <div key={equipment.id} className="text-xs">
-                  <div className="font-medium">{equipment.name}</div>
-                  <div className="text-gray-600">{equipment.supplier}</div>
+            <CardContent className="space-y-4">
+              {state.products.equipments.map((equipment) => (
+                <div key={equipment.id} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+                  {/* Ürün Görseli */}
+                  <div className="w-full h-24 bg-gray-100 rounded-lg mb-2 flex items-center justify-center">
+                    {equipment.imageUrl ? (
+                      <img 
+                        src={equipment.imageUrl} 
+                        alt={equipment.name}
+                        className="h-20 w-20 object-contain rounded"
+                      />
+                    ) : (
+                      <Factory className="h-8 w-8 text-gray-400" />
+                    )}
+                  </div>
+                  
+                  {/* Ürün Bilgileri */}
+                  <div className="space-y-1">
+                    <div className="font-semibold text-sm text-gray-800">{equipment.name}</div>
+                    <div className="text-xs text-gray-600">Tedarikçi: {equipment.supplier}</div>
+                    <div className="text-xs font-semibold text-green-600">
+                      Fiyat: {equipment.price || 'Belirtilmemiş'}
+                    </div>
+                    <div className="text-xs text-gray-700 line-clamp-2">
+                      {equipment.specifications || 'Özellik bilgisi eklenmemiş'}
+                    </div>
+                  </div>
                 </div>
               ))}
+              {state.products.equipments.length === 0 && (
+                <div className="text-center text-gray-400 py-4">
+                  <Factory className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-xs">Henüz ürün eklenmemiş</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
           {/* E-Moped */}
-          <Card className="border-blue-200">
+          <Card className="border-blue-200 hover:shadow-lg transition-all duration-300">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium flex items-center">
-                <Zap className="h-4 w-4 mr-2 text-blue-600" />
-                E-Moped
+                <Zap className="h-5 w-5 mr-2 text-blue-600" />
+                <span>Kategori B: E-Moped</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-4">
               {state.products.emopeds.map((emoped) => (
-                <div key={emoped.id} className="text-xs">
-                  <div className="font-medium">{emoped.name}</div>
-                  <div className="text-gray-600">{emoped.supplier}</div>
+                <div key={emoped.id} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+                  {/* Ürün Görseli */}
+                  <div className="w-full h-24 bg-gray-100 rounded-lg mb-2 flex items-center justify-center">
+                    {emoped.imageUrl ? (
+                      <img 
+                        src={emoped.imageUrl} 
+                        alt={emoped.name}
+                        className="h-20 w-20 object-contain rounded"
+                      />
+                    ) : (
+                      <Zap className="h-8 w-8 text-gray-400" />
+                    )}
+                  </div>
+                  
+                  {/* Ürün Bilgileri */}
+                  <div className="space-y-1">
+                    <div className="font-semibold text-sm text-gray-800">{emoped.name}</div>
+                    <div className="text-xs text-gray-600">Tedarikçi: {emoped.supplier}</div>
+                    <div className="text-xs font-semibold text-green-600">
+                      Gümrük Sonrası: {emoped.customsData?.finalTl ? 
+                        `${emoped.customsData.finalTl.toLocaleString()} TL` : 
+                        emoped.price || 'Hesaplanmamış'}
+                    </div>
+                    <div className="text-xs text-gray-700 line-clamp-2">
+                      {emoped.specifications || 'Motor: 3000W, Hız: 80km/h, Menzil: 60-80km'}
+                    </div>
+                  </div>
                 </div>
               ))}
+              {state.products.emopeds.length === 0 && (
+                <div className="text-center text-gray-400 py-4">
+                  <Zap className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-xs">Henüz ürün eklenmemiş</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
           {/* Batarya */}
-          <Card className="border-green-200">
+          <Card className="border-green-200 hover:shadow-lg transition-all duration-300">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium flex items-center">
-                <Battery className="h-4 w-4 mr-2 text-green-600" />
-                Batarya
+                <Battery className="h-5 w-5 mr-2 text-green-600" />
+                <span>Kategori C: Batarya</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-4">
               {state.products.batteries.map((battery) => (
-                <div key={battery.id} className="text-xs">
-                  <div className="font-medium">{battery.name}</div>
-                  <div className="text-gray-600">{battery.supplier}</div>
+                <div key={battery.id} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+                  {/* Ürün Görseli */}
+                  <div className="w-full h-24 bg-gray-100 rounded-lg mb-2 flex items-center justify-center">
+                    {battery.imageUrl ? (
+                      <img 
+                        src={battery.imageUrl} 
+                        alt={battery.name}
+                        className="h-20 w-20 object-contain rounded"
+                      />
+                    ) : (
+                      <Battery className="h-8 w-8 text-gray-400" />
+                    )}
+                  </div>
+                  
+                  {/* Ürün Bilgileri */}
+                  <div className="space-y-1">
+                    <div className="font-semibold text-sm text-gray-800">{battery.name}</div>
+                    <div className="text-xs text-gray-600">Tedarikçi: {battery.supplier}</div>
+                    <div className="text-xs font-semibold text-green-600">
+                      Gümrük Sonrası: {battery.customsData?.finalTl ? 
+                        `${battery.customsData.finalTl.toLocaleString()} TL` : 
+                        battery.price || 'Hesaplanmamış'}
+                    </div>
+                    <div className="text-xs text-gray-700 line-clamp-2">
+                      {battery.specifications || 'IP67 dayanıklılık, Akıllı BMS sistemi'}
+                    </div>
+                  </div>
                 </div>
               ))}
+              {state.products.batteries.length === 0 && (
+                <div className="text-center text-gray-400 py-4">
+                  <Battery className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-xs">Henüz ürün eklenmemiş</p>
+                </div>
+              )}
             </CardContent>
           </Card>
 
           {/* Kabinet */}
-          <Card className="border-purple-200">
+          <Card className="border-purple-200 hover:shadow-lg transition-all duration-300">
             <CardHeader className="pb-3">
               <CardTitle className="text-sm font-medium flex items-center">
-                <Package className="h-4 w-4 mr-2 text-purple-600" />
-                Kabinet
+                <Package className="h-5 w-5 mr-2 text-purple-600" />
+                <span>Kategori D: Kabinet</span>
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-2">
+            <CardContent className="space-y-4">
               {state.products.cabinets.map((cabinet) => (
-                <div key={cabinet.id} className="text-xs">
-                  <div className="font-medium">{cabinet.name}</div>
-                  <div className="text-gray-600">{cabinet.supplier}</div>
+                <div key={cabinet.id} className="border-b border-gray-100 pb-3 last:border-b-0 last:pb-0">
+                  {/* Ürün Görseli */}
+                  <div className="w-full h-24 bg-gray-100 rounded-lg mb-2 flex items-center justify-center">
+                    {cabinet.imageUrl ? (
+                      <img 
+                        src={cabinet.imageUrl} 
+                        alt={cabinet.name}
+                        className="h-20 w-20 object-contain rounded"
+                      />
+                    ) : (
+                      <Package className="h-8 w-8 text-gray-400" />
+                    )}
+                  </div>
+                  
+                  {/* Ürün Bilgileri */}
+                  <div className="space-y-1">
+                    <div className="font-semibold text-sm text-gray-800">{cabinet.name}</div>
+                    <div className="text-xs text-gray-600">Tedarikçi: {cabinet.supplier}</div>
+                    <div className="text-xs font-semibold text-green-600">
+                      Gümrük Sonrası: {cabinet.customsData?.finalTl ? 
+                        `${cabinet.customsData.finalTl.toLocaleString()} TL` : 
+                        cabinet.price || 'Hesaplanmamış'}
+                    </div>
+                    <div className="text-xs text-gray-700 line-clamp-2">
+                      {cabinet.specifications || '8-10 slot swap kabinleri, Akıllı sıcaklık yönetimi'}
+                    </div>
+                  </div>
                 </div>
               ))}
+              {state.products.cabinets.length === 0 && (
+                <div className="text-center text-gray-400 py-4">
+                  <Package className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                  <p className="text-xs">Henüz ürün eklenmemiş</p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>
