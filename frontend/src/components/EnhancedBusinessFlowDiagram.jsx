@@ -335,15 +335,20 @@ const EnhancedBusinessFlowDiagram = () => {
             );
           })}
 
-          {/* Arrows: Suppliers to Fiyuu (solid - purchase) */}
+          {/* Arrows: Suppliers to Fiyuu (solid - purchase) - Specifically Zhizhu */}
           {state.businessFlow.supplierToFiyuu.map(supplierId => {
             const supplierIndex = state.suppliers.findIndex(s => s.id === supplierId);
             if (supplierIndex === -1) return null;
             const supplierPos = positions.suppliers[supplierIndex];
             if (!supplierPos) return null;
             
-            // First go to Ertug, then from Ertug to Fiyuu for the flow
-            return null; // We'll handle this through Ertug -> Fiyuu connection
+            return createArrowPath(
+              supplierPos,
+              positions.fiyuu,
+              false,
+              'Batarya + Cabinet',
+              0
+            );
           })}
 
           {/* Arrow: Suppliers to Ertug (combined flow) */}
