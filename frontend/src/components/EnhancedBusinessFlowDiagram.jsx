@@ -10,27 +10,29 @@ const EnhancedBusinessFlowDiagram = () => {
   const nodeWidth = 140;
   const nodeHeight = 70;
 
-  // Pyramid positioning - hierarchical from top to bottom
+  // Pyramid positioning - vertical hierarchical from top to bottom
   const positions = {
     // Level 1 (Top) - AtaBridge centered
     atabridge: { x: 600, y: 50 },
     
-    // Level 2 (Middle) - Suppliers distributed horizontally
+    // Level 2 (Second) - Suppliers distributed horizontally  
     suppliers: state.suppliers.map((_, index) => {
       const totalSuppliers = state.suppliers.length;
-      const startX = (svgWidth - (totalSuppliers * (nodeWidth + 40))) / 2;
+      const startX = (svgWidth - (totalSuppliers * (nodeWidth + 30))) / 2;
       return {
-        x: startX + (index * (nodeWidth + 40)),
-        y: 200
+        x: startX + (index * (nodeWidth + 30)),
+        y: 180
       };
     }),
     
-    // Level 3 (Lower) - Ertuğ and Fiyuu
-    ertug: { x: 400, y: 350 },
-    fiyuu: { x: 800, y: 350 },
+    // Level 3 (Third) - Ertuğ centered
+    ertug: { x: 600, y: 310 },
     
-    // Level 4 (Bottom) - End User centered
-    endUser: { x: 600, y: 500 }
+    // Level 4 (Fourth) - Fiyuu centered
+    fiyuu: { x: 600, y: 440 },
+    
+    // Level 5 (Bottom) - End User centered
+    endUser: { x: 600, y: 570 }
   };
 
   // Helper function to create arrow paths
