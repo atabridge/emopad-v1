@@ -334,14 +334,29 @@ const EnhancedBusinessFlowDiagram = () => {
             const supplierPos = positions.suppliers[supplierIndex];
             if (!supplierPos) return null;
             
-            return createArrowPath(
-              supplierPos,
-              positions.fiyuu,
-              false,
-              'Batarya + Cabinet',
-              -20
-            );
+            // First go to Ertug, then from Ertug to Fiyuu for the flow
+            return null; // We'll handle this through Ertug -> Fiyuu connection
           })}
+
+          {/* Arrow: Suppliers to Ertug (combined flow) */}
+          {state.businessFlow.supplierToErtug.length > 0 && (
+            <g>
+              {state.businessFlow.supplierToErtug.map(supplierId => {
+                const supplierIndex = state.suppliers.findIndex(s => s.id === supplierId);
+                if (supplierIndex === -1) return null;
+                const supplierPos = positions.suppliers[supplierIndex];
+                if (!supplierPos) return null;
+                
+                return createArrowPath(
+                  supplierPos,
+                  positions.ertug,
+                  false,
+                  '',
+                  0
+                );
+              })}
+            </g>
+          )}
 
           {/* Arrow: Ertug to Fiyuu */}
           {state.businessFlow.ertugToFiyuu && createArrowPath(
