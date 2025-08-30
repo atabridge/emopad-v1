@@ -249,7 +249,7 @@ const ProductsTab = () => {
           </div>
           
           {/* Gümrük Hesaplama Tablosu */}
-          {(categoryKey === 'emopeds' || categoryKey === 'batteries' || categoryKey === 'cabinets') && (
+          {(categoryKey === 'equipments' || categoryKey === 'emopeds' || categoryKey === 'batteries' || categoryKey === 'cabinets') && (
             <CustomsCalculationTable product={product} category={categoryInfo.category} />
           )}
         </CardContent>
