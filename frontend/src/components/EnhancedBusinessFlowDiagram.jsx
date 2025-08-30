@@ -338,7 +338,7 @@ const EnhancedBusinessFlowDiagram = () => {
             positions.ertug,
             positions.fiyuu,
             false,
-            'Tamamlanmış E-Moped',
+            'Bataryasız E-Moped Satıyor',
             0
           )}
 
