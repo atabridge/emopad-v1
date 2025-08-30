@@ -4,44 +4,52 @@ import { useBusinessPlan } from '../context/BusinessPlanContext';
 const EnhancedBusinessFlowDiagram = () => {
   const { state } = useBusinessPlan();
 
-  // SVG dimensions and layout - vertically oriented as per the image
-  const svgWidth = 1200;
-  const svgHeight = 600;
+  // SVG dimensions and layout - pyramid hierarchical structure
+  const svgWidth = 1400;
+  const svgHeight = 700;
   const nodeWidth = 140;
-  const nodeHeight = 80;
+  const nodeHeight = 70;
 
-  // Position calculations based on the flow diagram image
+  // Pyramid positioning - hierarchical from top to bottom
   const positions = {
-    // Top level - AtaBridge (Danışmanlık & Tedarik Bulma)
-    atabridge: { x: 50, y: 50 },
+    // Level 1 (Top) - AtaBridge centered
+    atabridge: { x: 600, y: 50 },
     
-    // Second level - All suppliers in a horizontal row
-    suppliers: state.suppliers.map((_, index) => ({
-      x: 150 + (index * 180),
-      y: 200
-    })),
+    // Level 2 (Middle) - Suppliers distributed horizontally
+    suppliers: state.suppliers.map((_, index) => {
+      const totalSuppliers = state.suppliers.length;
+      const startX = (svgWidth - (totalSuppliers * (nodeWidth + 40))) / 2;
+      return {
+        x: startX + (index * (nodeWidth + 40)),
+        y: 200
+      };
+    }),
     
-    // Third level - Ertuğ (Montaj & Üretim) - left side
-    ertug: { x: 200, y: 350 },
+    // Level 3 (Lower) - Ertuğ and Fiyuu
+    ertug: { x: 400, y: 350 },
+    fiyuu: { x: 800, y: 350 },
     
-    // Third level - Fiyuu (Satış & Swap Operasyonu) - right side  
-    fiyuu: { x: 600, y: 350 },
-    
-    // Bottom level - Son Kullanıcı (Kurye)
-    endUser: { x: 400, y: 500 }
+    // Level 4 (Bottom) - End User centered
+    endUser: { x: 600, y: 500 }
   };
 
   // Helper function to create arrow paths
-  const createArrowPath = (start, end, isDashed = false, label = '') => {
+  const createArrowPath = (start, end, isDashed = false, label = '', curveOffset = 0) => {
     const startX = start.x + nodeWidth / 2;
     const startY = start.y + nodeHeight;
     const endX = end.x + nodeWidth / 2;
     const endY = end.y;
     
+    // Add curve for better visual flow
+    const midY = (startY + endY) / 2 + curveOffset;
+    
     return (
-      <g key={`${start.x}-${start.y}-${end.x}-${end.y}`}>
+      <g key={`${start.x}-${start.y}-${end.x}-${end.y}-${Math.random()}`}>
         <path
-          d={`M ${startX} ${startY} L ${endX} ${endY}`}
+          d={curveOffset !== 0 ? 
+            `M ${startX} ${startY} Q ${startX + (endX - startX) / 2} ${midY} ${endX} ${endY}` :
+            `M ${startX} ${startY} L ${endX} ${endY}`
+          }
           stroke={isDashed ? "#fb923c" : "#ea580c"}
           strokeWidth="2"
           fill="none"
@@ -53,7 +61,7 @@ const EnhancedBusinessFlowDiagram = () => {
             x={(startX + endX) / 2}
             y={(startY + endY) / 2 - 10}
             textAnchor="middle"
-            className="fill-gray-600 text-xs font-medium"
+            className="fill-gray-600 text-xs font-medium bg-white"
           >
             {label}
           </text>
@@ -80,7 +88,40 @@ const EnhancedBusinessFlowDiagram = () => {
             </marker>
           </defs>
 
-          {/* AtaBridge Node - Top */}
+          {/* Level Labels on the left */}
+          <text
+            x="20"
+            y="90"
+            className="fill-gray-500 text-sm font-semibold"
+          >
+            Danışmanlık & Tedarik Bulma
+          </text>
+          
+          <text
+            x="20"
+            y="240"
+            className="fill-gray-500 text-sm font-semibold"
+          >
+            Tedarikçiler
+          </text>
+          
+          <text
+            x="20"
+            y="390"
+            className="fill-gray-500 text-sm font-semibold"
+          >
+            Montaj & Üretim
+          </text>
+          
+          <text
+            x="20"
+            y="540"
+            className="fill-gray-500 text-sm font-semibold"
+          >
+            Son Kullanıcı
+          </text>
+
+          {/* Level 1: AtaBridge Node - Top Center */}
           <g>
             <rect
               x={positions.atabridge.x}
@@ -90,13 +131,14 @@ const EnhancedBusinessFlowDiagram = () => {
               rx="12"
               fill="#fb923c"
               stroke="#ea580c"
-              strokeWidth="2"
+              strokeWidth="3"
+              filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.1))"
             />
             <text
               x={positions.atabridge.x + nodeWidth/2}
               y={positions.atabridge.y + nodeHeight/2 - 8}
               textAnchor="middle"
-              className="fill-white text-sm font-bold"
+              className="fill-white text-base font-bold"
             >
               AtaBridge
             </text>
@@ -108,19 +150,9 @@ const EnhancedBusinessFlowDiagram = () => {
             >
               Tedarik Araştırma & Danışmanlık
             </text>
-            {/* Role label */}
-            <text
-              x={positions.atabridge.x - 10}
-              y={positions.atabridge.y + nodeHeight/2}
-              textAnchor="middle"
-              className="fill-gray-500 text-xs font-medium"
-              transform={`rotate(-90, ${positions.atabridge.x - 10}, ${positions.atabridge.y + nodeHeight/2})`}
-            >
-              Danışmanlık & Tedarik Bulma
-            </text>
           </g>
 
-          {/* Supplier Nodes - Second Level */}
+          {/* Level 2: Supplier Nodes - Horizontal distribution */}
           {state.suppliers.map((supplier, index) => {
             const pos = positions.suppliers[index];
             if (!pos) return null;
@@ -136,6 +168,7 @@ const EnhancedBusinessFlowDiagram = () => {
                   fill="#f8fafc"
                   stroke="#94a3b8"
                   strokeWidth="2"
+                  filter="drop-shadow(1px 1px 2px rgba(0,0,0,0.1))"
                 />
                 <text
                   x={pos.x + nodeWidth/2}
@@ -151,25 +184,15 @@ const EnhancedBusinessFlowDiagram = () => {
                   textAnchor="middle"
                   className="fill-gray-600 text-xs"
                 >
-                  {supplier.description}
+                  {supplier.description.length > 20 ? 
+                    supplier.description.substring(0, 20) + '...' : 
+                    supplier.description}
                 </text>
-                {/* Tedarikçiler label */}
-                {index === 0 && (
-                  <text
-                    x={pos.x - 10}
-                    y={pos.y + nodeHeight/2}
-                    textAnchor="middle"
-                    className="fill-gray-500 text-xs font-medium"
-                    transform={`rotate(-90, ${pos.x - 10}, ${pos.y + nodeHeight/2})`}
-                  >
-                    Tedarikçiler
-                  </text>
-                )}
               </g>
             );
           })}
 
-          {/* Ertuğ Node - Third Level Left */}
+          {/* Level 3: Ertuğ Node - Lower Left */}
           <g>
             <rect
               x={positions.ertug.x}
@@ -179,13 +202,14 @@ const EnhancedBusinessFlowDiagram = () => {
               rx="12"
               fill="#10b981"
               stroke="#047857"
-              strokeWidth="2"
+              strokeWidth="3"
+              filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.1))"
             />
             <text
               x={positions.ertug.x + nodeWidth/2}
               y={positions.ertug.y + nodeHeight/2 - 8}
               textAnchor="middle"
-              className="fill-white text-sm font-bold"
+              className="fill-white text-base font-bold"
             >
               Ertuğ
             </text>
@@ -197,19 +221,9 @@ const EnhancedBusinessFlowDiagram = () => {
             >
               Montaj & Üretim
             </text>
-            {/* Role label */}
-            <text
-              x={positions.ertug.x - 10}
-              y={positions.ertug.y + nodeHeight/2}
-              textAnchor="middle"
-              className="fill-gray-500 text-xs font-medium"
-              transform={`rotate(-90, ${positions.ertug.x - 10}, ${positions.ertug.y + nodeHeight/2})`}
-            >
-              Montaj & Üretim
-            </text>
           </g>
 
-          {/* Fiyuu Node - Third Level Right */}
+          {/* Level 3: Fiyuu Node - Lower Right */}
           <g>
             <rect
               x={positions.fiyuu.x}
@@ -219,13 +233,14 @@ const EnhancedBusinessFlowDiagram = () => {
               rx="12"
               fill="#3b82f6"
               stroke="#1d4ed8"
-              strokeWidth="2"
+              strokeWidth="3"
+              filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.1))"
             />
             <text
               x={positions.fiyuu.x + nodeWidth/2}
               y={positions.fiyuu.y + nodeHeight/2 - 8}
               textAnchor="middle"
-              className="fill-white text-sm font-bold"
+              className="fill-white text-base font-bold"
             >
               Fiyuu
             </text>
@@ -237,19 +252,9 @@ const EnhancedBusinessFlowDiagram = () => {
             >
               Satış & Swap Operasyonu
             </text>
-            {/* Role label */}
-            <text
-              x={positions.fiyuu.x + nodeWidth + 20}
-              y={positions.fiyuu.y + nodeHeight/2}
-              textAnchor="middle"
-              className="fill-gray-500 text-xs font-medium"
-              transform={`rotate(-90, ${positions.fiyuu.x + nodeWidth + 20}, ${positions.fiyuu.y + nodeHeight/2})`}
-            >
-              Satış & Swap Operasyonu
-            </text>
           </g>
 
-          {/* End User Node - Bottom */}
+          {/* Level 4: End User Node - Bottom Center */}
           <g>
             <rect
               x={positions.endUser.x}
@@ -259,13 +264,14 @@ const EnhancedBusinessFlowDiagram = () => {
               rx="12"
               fill="#8b5cf6"
               stroke="#7c3aed"
-              strokeWidth="2"
+              strokeWidth="3"
+              filter="drop-shadow(2px 2px 4px rgba(0,0,0,0.1))"
             />
             <text
               x={positions.endUser.x + nodeWidth/2}
               y={positions.endUser.y + nodeHeight/2 - 8}
               textAnchor="middle"
-              className="fill-white text-sm font-bold"
+              className="fill-white text-base font-bold"
             >
               Kurye
             </text>
@@ -277,19 +283,9 @@ const EnhancedBusinessFlowDiagram = () => {
             >
               Son Kullanıcı
             </text>
-            {/* Role label */}
-            <text
-              x={positions.endUser.x - 10}
-              y={positions.endUser.y + nodeHeight/2}
-              textAnchor="middle"
-              className="fill-gray-500 text-xs font-medium"
-              transform={`rotate(-90, ${positions.endUser.x - 10}, ${positions.endUser.y + nodeHeight/2})`}
-            >
-              Son Kullanıcı
-            </text>
           </g>
 
-          {/* Arrows - AtaBridge to Suppliers (dashed - consultancy) */}
+          {/* Arrows: AtaBridge to Suppliers (dashed - consultancy) */}
           {state.businessFlow.atabridgeConnections.map(supplierId => {
             const supplierIndex = state.suppliers.findIndex(s => s.id === supplierId);
             if (supplierIndex === -1) return null;
@@ -300,29 +296,35 @@ const EnhancedBusinessFlowDiagram = () => {
               positions.atabridge,
               supplierPos,
               true,
-              'Bağlantı'
+              'Bağlantı',
+              20
             );
           })}
 
-          {/* Arrows - Suppliers to Ertug (solid - purchase) */}
+          {/* Arrows: Suppliers to Ertug (solid - purchase) */}
           {state.businessFlow.supplierToErtug.map(supplierId => {
             const supplierIndex = state.suppliers.findIndex(s => s.id === supplierId);
             if (supplierIndex === -1) return null;
             const supplierPos = positions.suppliers[supplierIndex];
             if (!supplierPos) return null;
             
+            const supplierName = state.suppliers[supplierIndex].name;
+            let label = '';
+            if (supplierName === 'Jinggong') label = 'Montaj Hattı';
+            else if (supplierName === 'Sanco') label = 'Boru Bükme Mak.';
+            else if (supplierName === 'Lingping') label = 'Lazer Kaynak Mak.';
+            else if (supplierName === 'Sleeu') label = 'CKD E-Moped';
+            
             return createArrowPath(
               supplierPos,
               positions.ertug,
               false,
-              supplierIndex < 4 ? (supplierIndex === 0 ? 'Montaj Hattı' : 
-                                 supplierIndex === 1 ? 'Boru Bükme Mak.' : 
-                                 supplierIndex === 2 ? 'Lazer Kaynak Mak.' : 
-                                 'CKD E-Moped Parçaları') : ''
+              label,
+              -20
             );
           })}
 
-          {/* Arrows - Suppliers to Fiyuu (solid - purchase) */}
+          {/* Arrows: Suppliers to Fiyuu (solid - purchase) */}
           {state.businessFlow.supplierToFiyuu.map(supplierId => {
             const supplierIndex = state.suppliers.findIndex(s => s.id === supplierId);
             if (supplierIndex === -1) return null;
@@ -333,44 +335,63 @@ const EnhancedBusinessFlowDiagram = () => {
               supplierPos,
               positions.fiyuu,
               false,
-              'Batarya + Cabinet'
+              'Batarya + Cabinet',
+              -20
             );
           })}
 
-          {/* Arrow - Ertug to Fiyuu */}
+          {/* Arrow: Ertug to Fiyuu */}
           {state.businessFlow.ertugToFiyuu && createArrowPath(
             positions.ertug,
             positions.fiyuu,
             false,
-            'Tamamlanmış E-Moped Satışı'
+            'Tamamlanmış E-Moped',
+            0
           )}
 
-          {/* Arrow - Fiyuu to End User */}
+          {/* Arrows: Fiyuu to End User */}
           {(state.businessFlow.fiyuuToEndUser.emoped || state.businessFlow.fiyuuToEndUser.battery) && 
             createArrowPath(
               positions.fiyuu,
               positions.endUser,
               false,
-              'Swap E-Moped Satışı + Batarya'
+              state.businessFlow.fiyuuToEndUser.emoped && state.businessFlow.fiyuuToEndUser.battery 
+                ? "E-moped + Batarya Kiralama" 
+                : state.businessFlow.fiyuuToEndUser.emoped 
+                ? "E-moped Satışı" 
+                : "Batarya Kiralama",
+              20
             )
           }
+
+          {/* Ertuğ to End User (if direct connection) */}
+          {state.businessFlow.fiyuuToEndUser.emoped && createArrowPath(
+            positions.ertug,
+            positions.endUser,
+            false,
+            'E-moped Satışı',
+            30
+          )}
         </svg>
       </div>
 
       {/* Legend */}
-      <div className="mt-4 flex items-center justify-center space-x-8 bg-gray-50 p-4 rounded-lg">
-        <div className="text-sm font-semibold text-gray-700 mb-2">Lejant:</div>
-        <div className="flex items-center space-x-2">
-          <svg width="30" height="2">
-            <line x1="0" y1="1" x2="30" y2="1" stroke="#fb923c" strokeWidth="2" strokeDasharray="8,4" />
-          </svg>
-          <span className="text-xs text-gray-600">Bağlantı / Danışmanlık</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <svg width="30" height="2">
-            <line x1="0" y1="1" x2="30" y2="1" stroke="#ea580c" strokeWidth="2" />
-          </svg>
-          <span className="text-xs text-gray-600">Satın Alma / Ürün Akışı</span>
+      <div className="mt-6 bg-gray-50 p-4 rounded-lg">
+        <div className="text-sm font-semibold text-gray-700 mb-3 text-center">Lejant</div>
+        <div className="flex items-center justify-center space-x-8">
+          <div className="flex items-center space-x-2">
+            <svg width="40" height="2">
+              <line x1="0" y1="1" x2="40" y2="1" stroke="#fb923c" strokeWidth="2" strokeDasharray="8,4" />
+            </svg>
+            <span className="text-xs text-gray-600">Bağlantı / Danışmanlık</span>
+          </div>
+          <div className="flex items-center space-x-2">
+            <svg width="40" height="2">
+              <line x1="0" y1="1" x2="40" y2="1" stroke="#ea580c" strokeWidth="2" />
+              <polygon points="37,0 40,1 37,2" fill="#ea580c" />
+            </svg>
+            <span className="text-xs text-gray-600">Satın Alma / Ürün Akışı</span>
+          </div>
         </div>
       </div>
     </div>
