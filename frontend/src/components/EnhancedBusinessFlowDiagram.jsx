@@ -202,7 +202,7 @@ const EnhancedBusinessFlowDiagram = () => {
             );
           })}
 
-          {/* Level 3: Ertuğ Node - Lower Left */}
+          {/* Level 3: Ertuğ Node - Third Level Center */}
           <g>
             <rect
               x={positions.ertug.x}
@@ -233,7 +233,7 @@ const EnhancedBusinessFlowDiagram = () => {
             </text>
           </g>
 
-          {/* Level 3: Fiyuu Node - Lower Right */}
+          {/* Level 4: Fiyuu Node - Fourth Level Center */}
           <g>
             <rect
               x={positions.fiyuu.x}
@@ -264,7 +264,7 @@ const EnhancedBusinessFlowDiagram = () => {
             </text>
           </g>
 
-          {/* Level 4: End User Node - Bottom Center */}
+          {/* Level 5: End User Node - Bottom Center */}
           <g>
             <rect
               x={positions.endUser.x}
@@ -283,7 +283,7 @@ const EnhancedBusinessFlowDiagram = () => {
               textAnchor="middle"
               className="fill-white text-base font-bold"
             >
-              Kurye
+              Esnaf Kurye
             </text>
             <text
               x={positions.endUser.x + nodeWidth/2}
