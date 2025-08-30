@@ -24,7 +24,7 @@ const BusinessFlowTab = () => {
   };
 
   const handleSave = () => {
-    // Context güncellemesi burada implement edilecek
+    // Context güncellemesi
     dispatch({
       type: actionTypes.UPDATE_BUSINESS_FLOW,
       payload: formData
@@ -44,7 +44,39 @@ const BusinessFlowTab = () => {
         connections: state.businessFlow.atabridgeConnections || []
       });
     }
-    // Diğer bölümler için de benzer setup yapılacak
+  };
+
+  const handleSupplierConnectionChange = (supplierId, target, checked) => {
+    const currentFlow = { ...state.businessFlow };
+    
+    if (target === 'ertug') {
+      let supplierToErtug = [...(currentFlow.supplierToErtug || [])];
+      if (checked) {
+        if (!supplierToErtug.includes(supplierId)) {
+          supplierToErtug.push(supplierId);
+        }
+      } else {
+        supplierToErtug = supplierToErtug.filter(id => id !== supplierId);
+      }
+      currentFlow.supplierToErtug = supplierToErtug;
+    } else if (target === 'fiyuu') {
+      let supplierToFiyuu = [...(currentFlow.supplierToFiyuu || [])];
+      if (checked) {
+        if (!supplierToFiyuu.includes(supplierId)) {
+          supplierToFiyuu.push(supplierId);
+        }
+      } else {
+        supplierToFiyuu = supplierToFiyuu.filter(id => id !== supplierId);
+      }
+      currentFlow.supplierToFiyuu = supplierToFiyuu;
+    }
+    
+    dispatch({
+      type: actionTypes.UPDATE_BUSINESS_FLOW,
+      payload: currentFlow
+    });
+    
+    toast.success('Bağlantı güncellendi');
   };
 
   return (
