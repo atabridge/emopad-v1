@@ -10,10 +10,83 @@ import {
   Users,
   Factory,
   Battery,
-  Zap
+  Zap,
+  Calculator
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import EnhancedBusinessFlowDiagram from '../EnhancedBusinessFlowDiagram';
+
+// Gümrük hesaplama tablosu bileşeni
+const CustomsCalculationTable = ({ product, category }) => {
+  if (!product?.customsData) return null;
+
+  const { customsData } = product;
+
+  return (
+    <Card className="mt-3 border-gray-200">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xs flex items-center">
+          <Calculator className="h-3 w-3 mr-1" />
+          Gümrük Hesaplaması
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-0">
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-gray-50">
+                <th className="border border-gray-300 p-1 text-left text-xs">Brand</th>
+                <th className="border border-gray-300 p-1 text-left text-xs">HS Code</th>
+                <th className="border border-gray-300 p-1 text-right text-xs">FOB USD</th>
+                <th className="border border-gray-300 p-1 text-right text-xs">Qty</th>
+                <th className="border border-gray-300 p-1 text-right text-xs">CIF USD</th>
+                <th className="border border-gray-300 p-1 text-right text-xs">Final TL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 p-1 text-xs">{customsData.brand}</td>
+                <td className="border border-gray-300 p-1 text-xs">{customsData.hsCode}</td>
+                <td className="border border-gray-300 p-1 text-right text-xs">{customsData.fobUsd?.toLocaleString()}</td>
+                <td className="border border-gray-300 p-1 text-right text-xs">{customsData.qty?.toLocaleString()}</td>
+                <td className="border border-gray-300 p-1 text-right text-xs">{customsData.cifUsd?.toLocaleString()}</td>
+                <td className="border border-gray-300 p-1 text-right text-xs font-bold bg-green-50">
+                  {customsData.finalTl?.toLocaleString()}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Önemli veriler */}
+        <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
+          <div className="p-1 bg-blue-50 rounded text-center">
+            <div className="font-semibold text-blue-800">GV</div>
+            <div className="text-blue-600">
+              {category === 'A' ? '3.70%' : 
+               category === 'B' ? '3.70%' : 
+               category === 'C' ? '2.70%' : '3.30%'}
+            </div>
+          </div>
+          <div className="p-1 bg-orange-50 rounded text-center">
+            <div className="font-semibold text-orange-800">İlave GV</div>
+            <div className="text-orange-600">
+              {category === 'A' ? '5.00%' : 
+               category === 'B' ? '5.00%' : 
+               category === 'C' ? '30.00%' : '5.00%'}
+            </div>
+          </div>
+          <div className="p-1 bg-green-50 rounded text-center">
+            <div className="font-semibold text-green-800">ÖTV</div>
+            <div className="text-green-600">
+              {category === 'C' ? '3.0%' : '0.0%'}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 const DashboardTab = () => {
   const { state } = useBusinessPlan();
