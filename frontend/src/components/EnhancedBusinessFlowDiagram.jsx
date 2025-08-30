@@ -308,18 +308,11 @@ const EnhancedBusinessFlowDiagram = () => {
             const supplierPos = positions.suppliers[supplierIndex];
             if (!supplierPos) return null;
             
-            const supplierName = state.suppliers[supplierIndex].name;
-            let label = '';
-            if (supplierName === 'Jinggong') label = 'Montaj Hattı';
-            else if (supplierName === 'Sanco') label = 'Boru Bükme Mak.';
-            else if (supplierName === 'Lingping') label = 'Lazer Kaynak Mak.';
-            else if (supplierName === 'Sleeu') label = 'CKD E-Moped';
-            
             return createArrowPath(
               supplierPos,
               positions.ertug,
               false,
-              label,
+              '', // Etiket kaldırıldı
               -20
             );
           })}
