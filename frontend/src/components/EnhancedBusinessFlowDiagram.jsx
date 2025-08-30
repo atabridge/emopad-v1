@@ -146,19 +146,27 @@ const EnhancedBusinessFlowDiagram = () => {
             />
             <text
               x={positions.atabridge.x + nodeWidth/2}
-              y={positions.atabridge.y + nodeHeight/2 - 8}
+              y={positions.atabridge.y + nodeHeight/2 - 5}
               textAnchor="middle"
-              className="fill-white text-base font-bold"
+              className="fill-white text-sm font-bold"
             >
               AtaBridge
             </text>
             <text
               x={positions.atabridge.x + nodeWidth/2}
-              y={positions.atabridge.y + nodeHeight/2 + 8}
+              y={positions.atabridge.y + nodeHeight/2 + 10}
               textAnchor="middle"
               className="fill-white text-xs"
             >
-              Tedarik Araştırma & Danışmanlık
+              Tedarik Araştırma &
+            </text>
+            <text
+              x={positions.atabridge.x + nodeWidth/2}
+              y={positions.atabridge.y + nodeHeight/2 + 22}
+              textAnchor="middle"
+              className="fill-white text-xs"
+            >
+              Danışmanlık
             </text>
           </g>
 
