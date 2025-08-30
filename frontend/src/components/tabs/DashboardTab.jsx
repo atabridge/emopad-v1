@@ -92,13 +92,55 @@ const DashboardTab = () => {
             </div>
             
             <div>
-              <h3 className="text-lg font-semibold text-orange-600 mb-3">Aktörler</h3>
-              <div className="grid md:grid-cols-3 gap-4">
+              <h3 className="text-lg font-semibold text-orange-600 mb-4">Aktörler</h3>
+              <div className="grid md:grid-cols-3 gap-6">
                 {state.actors.map((actor, index) => (
-                  <div key={actor.id} className="p-4 bg-white rounded-lg shadow-sm border border-orange-100">
-                    <h4 className="font-semibold text-gray-800">{actor.name}</h4>
-                    <p className="text-sm text-gray-600">{actor.description}</p>
-                  </div>
+                  <Card key={actor.id} className="p-6 bg-white rounded-xl shadow-lg border border-orange-100 hover:shadow-xl transition-all duration-300">
+                    <div className="flex flex-col items-center text-center space-y-4">
+                      {/* Logo Area */}
+                      <div className="w-20 h-20 bg-gradient-to-br from-orange-100 to-amber-100 rounded-full flex items-center justify-center shadow-md">
+                        {actor.logoUrl ? (
+                          <img 
+                            src={actor.logoUrl} 
+                            alt={`${actor.name} Logo`}
+                            className="w-16 h-16 rounded-full object-contain"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className={`w-16 h-16 rounded-full bg-gradient-to-br ${
+                            actor.id === 'atabridge' ? 'from-orange-400 to-orange-600' :
+                            actor.id === 'ertug' ? 'from-green-400 to-green-600' :
+                            'from-blue-400 to-blue-600'
+                          } flex items-center justify-center ${actor.logoUrl ? 'hidden' : 'flex'}`}
+                        >
+                          <span className="text-white font-bold text-lg">
+                            {actor.name.charAt(0)}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      {/* Company Info */}
+                      <div>
+                        <h4 className="text-xl font-bold text-gray-800 mb-2">{actor.name}</h4>
+                        <p className="text-sm text-gray-600 leading-relaxed">{actor.description}</p>
+                      </div>
+                      
+                      {/* Role Badge */}
+                      <div className={`px-4 py-2 rounded-full text-sm font-semibold ${
+                        actor.id === 'atabridge' ? 'bg-orange-100 text-orange-800 border border-orange-200' :
+                        actor.id === 'ertug' ? 'bg-green-100 text-green-800 border border-green-200' :
+                        'bg-blue-100 text-blue-800 border border-blue-200'
+                      }`}>
+                        {actor.id === 'atabridge' ? 'Tedarik & Danışmanlık' :
+                         actor.id === 'ertug' ? 'Montaj & Üretim' :
+                         'Satış & Swap Operasyonu'}
+                      </div>
+                    </div>
+                  </Card>
                 ))}
               </div>
             </div>
