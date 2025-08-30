@@ -238,7 +238,10 @@ const BusinessFlowTab = () => {
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`${supplier.id}-ertug`}
-                      checked={state.businessFlow.supplierToErtug?.includes(supplier.id)}
+                      checked={state.businessFlow.supplierToErtug?.includes(supplier.id) || false}
+                      onCheckedChange={(checked) => 
+                        handleSupplierConnectionChange(supplier.id, 'ertug', checked)
+                      }
                     />
                     <label htmlFor={`${supplier.id}-ertug`} className="text-sm">
                       Ertuğ satın alır
@@ -247,7 +250,10 @@ const BusinessFlowTab = () => {
                   <div className="flex items-center space-x-2">
                     <Checkbox
                       id={`${supplier.id}-fiyuu`}
-                      checked={state.businessFlow.supplierToFiyuu?.includes(supplier.id)}
+                      checked={state.businessFlow.supplierToFiyuu?.includes(supplier.id) || false}
+                      onCheckedChange={(checked) => 
+                        handleSupplierConnectionChange(supplier.id, 'fiyuu', checked)
+                      }
                     />
                     <label htmlFor={`${supplier.id}-fiyuu`} className="text-sm">
                       Fiyuu satın alır
