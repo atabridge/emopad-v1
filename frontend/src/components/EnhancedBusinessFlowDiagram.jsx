@@ -356,15 +356,6 @@ const EnhancedBusinessFlowDiagram = () => {
               20
             )
           }
-
-          {/* Ertuğ to End User (if direct connection) */}
-          {state.businessFlow.fiyuuToEndUser.emoped && createArrowPath(
-            positions.ertug,
-            positions.endUser,
-            false,
-            'E-moped Satışı',
-            30
-          )}
         </svg>
       </div>
 
