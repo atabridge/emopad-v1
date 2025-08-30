@@ -13,7 +13,7 @@ import {
   Zap
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import BusinessFlowDiagram from '../BusinessFlowDiagram';
+import EnhancedBusinessFlowDiagram from '../EnhancedBusinessFlowDiagram';
 
 const DashboardTab = () => {
   const { state } = useBusinessPlan();
@@ -76,66 +76,44 @@ const DashboardTab = () => {
           <p className="text-gray-600">E-Moped Üretimi & Batarya Swap İstasyonları Projesi</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {/* Aktörler Kartı */}
-          <Card className="border-orange-200 hover:shadow-lg transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Aktörler</CardTitle>
-              <Users className="h-4 w-4 text-orange-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-orange-700">{state.actors.length}</div>
-              <div className="space-y-1 mt-2">
-                {state.actors.map((actor) => (
-                  <Badge key={actor.id} variant="outline" className="text-xs">
-                    {actor.name}
-                  </Badge>
+        <Card className="border-orange-200 hover:shadow-lg transition-shadow">
+          <CardHeader>
+            <div className="flex items-center space-x-3">
+              <div className="p-2 bg-orange-100 rounded-lg">
+                <Briefcase className="h-6 w-6 text-orange-600" />
+              </div>
+              <CardTitle className="text-xl font-bold text-gray-800">Proje Bilgileri</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div>
+              <h3 className="text-lg font-semibold text-orange-600 mb-2">Proje Adı</h3>
+              <p className="text-gray-700">E-Moped Üretimi & Batarya Swap İstasyonları</p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold text-orange-600 mb-3">Aktörler</h3>
+              <div className="grid md:grid-cols-3 gap-4">
+                {state.actors.map((actor, index) => (
+                  <div key={actor.id} className="p-4 bg-white rounded-lg shadow-sm border border-orange-100">
+                    <h4 className="font-semibold text-gray-800">{actor.name}</h4>
+                    <p className="text-sm text-gray-600">{actor.description}</p>
+                  </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
 
-          {/* Tedarikçiler Kartı */}
-          <Card className="border-blue-200 hover:shadow-lg transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Tedarikçiler</CardTitle>
-              <Factory className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-700">{state.suppliers.length}</div>
-              <p className="text-xs text-gray-600">Aktif tedarikçi sayısı</p>
-            </CardContent>
-          </Card>
-
-          {/* Ürün Kategorileri */}
-          <Card className="border-green-200 hover:shadow-lg transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Ürün Kategorileri</CardTitle>
-              <Package className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-700">4</div>
-              <p className="text-xs text-gray-600">Ekipman, E-Moped, Batarya, Kabinet</p>
-            </CardContent>
-          </Card>
-
-          {/* Toplam Yatırım */}
-          <Card className="border-purple-200 hover:shadow-lg transition-shadow">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Toplam Yatırım</CardTitle>
-              <DollarSign className="h-4 w-4 text-purple-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-purple-700">
-                {((investmentData.reduce((sum, item) => sum + item.value, 0) * 1000000) / 1000000).toFixed(0)}M USD
-              </div>
-              <p className="text-xs text-gray-600">Tüm aktörlerin toplam yatırımı</p>
-            </CardContent>
-          </Card>
-        </div>
+            <div>
+              <h3 className="text-lg font-semibold text-orange-600 mb-2">Amaç</h3>
+              <p className="text-gray-700 leading-relaxed">
+                Türkiye'de e-mobilite pazarına entegre e-moped üretimi + batarya swap altyapısı
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </section>
 
-      {/* İş Planı Diyagramı */}
+      {/* İş Süreci Akışı */}
       <section>
         <Card className="border-0 shadow-lg">
           <CardHeader>
@@ -150,7 +128,7 @@ const DashboardTab = () => {
             </div>
           </CardHeader>
           <CardContent>
-            <BusinessFlowDiagram />
+            <EnhancedBusinessFlowDiagram />
           </CardContent>
         </Card>
       </section>
