@@ -101,7 +101,7 @@ const EnhancedBusinessFlowDiagram = () => {
           
           <text
             x="20"
-            y="240"
+            y="220"
             className="fill-gray-500 text-sm font-semibold"
           >
             Tedarikçiler
@@ -109,7 +109,7 @@ const EnhancedBusinessFlowDiagram = () => {
           
           <text
             x="20"
-            y="390"
+            y="350"
             className="fill-gray-500 text-sm font-semibold"
           >
             Montaj & Üretim
@@ -117,10 +117,18 @@ const EnhancedBusinessFlowDiagram = () => {
           
           <text
             x="20"
-            y="540"
+            y="480"
             className="fill-gray-500 text-sm font-semibold"
           >
-            Son Kullanıcı
+            Satış & Swap Operasyonu
+          </text>
+          
+          <text
+            x="20"
+            y="610"
+            className="fill-gray-500 text-sm font-semibold"
+          >
+            Son Kullanıcı (Esnaf Kurye)
           </text>
 
           {/* Level 1: AtaBridge Node - Top Center */}
